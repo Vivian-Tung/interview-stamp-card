@@ -1,14 +1,20 @@
+"use client"; 
+
 import Image from "next/image";
+import { useState } from "react";
+import { Confetti, type ConfettiRef } from "@/components/ui/confetti"
+
+
 
 export default function Home() {
   const totalStamps = 10;
-  const filledCount = 3;
+  const [filledCount, setFillCount] = useState(0); // capture state of the stamps
+  const [showConfetti, setShowConfetti] = useState(false); //state for confetti
 
 
   return (
-    <main style={{ padding: "2rem" }}>
+    <main style={{ padding: "2rem" }} > 
       <h1>Interview Prep Stamp Card</h1>
-
       <div
         style={{
           display: "grid",
@@ -34,6 +40,44 @@ export default function Home() {
             );
         })}
       </div>
+      <div className="relative">
+        <button 
+          style={{ marginTop: "24px", position: "relative", zIndex: 1  }}
+          onClick={() => {
+            if (filledCount < totalStamps) {
+              setFillCount((prev) => {
+              const next = prev + 1;
+              
+              if (next === totalStamps) {
+                setShowConfetti(true);
+              }
+
+              return next;
+            });
+            }
+          }}
+        >
+          I prepped today
+        </button>
+        {showConfetti && (
+          <Confetti
+            className="fixed inset-0 pointer-events-none z-50"
+          />
+        )}
+
+
+      </div>
+      <button
+        style={{ 
+          marginTop: "24px",
+         }}
+        onClick={() => {
+          setFillCount(0);
+          setShowConfetti(false);
+        }}
+      >
+        Reset week
+      </button>
     </main>
   );
 }

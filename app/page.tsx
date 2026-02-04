@@ -55,7 +55,18 @@ export default function Home() {
       </div>
       <div className="relative">
         <button 
-          style={{ marginTop: "24px", position: "relative", zIndex: 1  }}
+            className="
+              mt-6
+              px-6 py-3
+              rounded-full
+              bg-neutral-900 text-white
+              font-medium
+              shadow-sm
+              transition
+              hover:bg-neutral-800
+              active:scale-95
+              disabled:opacity-40
+            "
           onClick={() => {
             if (filledCount < totalStamps) {
               setFillCount((prev) => {
@@ -70,7 +81,7 @@ export default function Home() {
             }
           }}
         >
-          I prepped today
+          I prepped today ✨
         </button>
         {showConfetti && (
           <Confetti
@@ -81,9 +92,18 @@ export default function Home() {
 
       </div>
       <button
-        style={{ 
-          marginTop: "24px",
-         }}
+        className="
+          mt-6
+          px-6 py-3
+          rounded-full
+          bg-neutral-900 text-white
+          font-medium
+          shadow-sm
+          transition
+          hover:bg-neutral-800
+          active:scale-95
+          disabled:opacity-40
+        "
         onClick={() => {
           setFillCount(0);
           setShowConfetti(false);

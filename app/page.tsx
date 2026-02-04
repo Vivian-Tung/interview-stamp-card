@@ -1,16 +1,29 @@
 "use client"; 
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Confetti, type ConfettiRef } from "@/components/ui/confetti"
 
 
 
 export default function Home() {
+  
   const totalStamps = 10;
   const [filledCount, setFillCount] = useState(0); // capture state of the stamps
   const [showConfetti, setShowConfetti] = useState(false); //state for confetti
 
+  useEffect(() => {
+    const savedCount = localStorage.getItem("filledCount");
+
+    if (savedCount !== null) {
+      setFillCount(Number(savedCount));
+    }
+  }, []);
+
+  
+  useEffect(() => {
+    localStorage.setItem("filledCount", filledCount.toString());
+  }, [filledCount]);
 
   return (
     <main style={{ padding: "2rem" }} > 
@@ -53,7 +66,7 @@ export default function Home() {
               }
 
               return next;
-            });
+              });
             }
           }}
         >
@@ -74,6 +87,7 @@ export default function Home() {
         onClick={() => {
           setFillCount(0);
           setShowConfetti(false);
+          localStorage.removeItem("filledCount");
         }}
       >
         Reset week

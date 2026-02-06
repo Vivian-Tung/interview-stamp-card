@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Confetti } from "@/components/ui/confetti";
+import { useEffect, useState, useRef } from "react";
+import { Confetti, type ConfettiRef } from "@/components/ui/confetti";
 
 type WeekInfo = {
   start: Date;
@@ -37,6 +37,7 @@ export function getCurrentWeek(date = new Date()): WeekInfo {
 }
 
 export default function Home() {
+  const confettiRef = useRef<ConfettiRef>(null)
   const totalStamps = 10;
   const week = getCurrentWeek();
   const [filledCount, setFillCount] = useState(0);
@@ -74,8 +75,33 @@ export default function Home() {
     localStorage.setItem("filledCount", "0");
   };
 
+  const stampStyle = (filled: boolean) => ({
+    width: "48px",
+    height: "48px",
+    borderRadius: "50%",
+    border: "2px solid #8b1d18",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "9px",
+    fontWeight: 700,
+    letterSpacing: "0.08em",
+    color: "#8b1d18",
+    backgroundColor: filled ? "rgba(139, 29, 24, 0.15)" : "transparent",
+    opacity: filled ? 1 : 0.35,
+    transform: filled
+      ? "rotate(-3deg) scale(1.05)"
+      : "scale(1)",
+    transition: "all 0.2s ease",
+  });
+
   return (
     <main style={{ padding: "2rem", minHeight: "100vh" }}>
+      {showConfetti && (
+        <Confetti 
+          className="absolute top-0 left-0 w-full h-full pointer-events-none z-50"
+          />
+      )}
       <div
         style={{
           marginTop: "24px",
@@ -110,34 +136,22 @@ export default function Home() {
             {Array.from({ length: totalStamps }).map((_, index) => {
               const isFilled = index < filledCount;
               return (
-                <div
-                  key={index}
-                  style={{
-                    width: "48px",
-                    height: "48px",
-                    borderRadius: "50%",
-                    border: "2px solid #333",
-                    backgroundColor: isFilled ? "#333" : "transparent",
-                  }}
-                />
+                <div key={index} style={stampStyle(isFilled)}>
+                  {isFilled ? "DONE" : ""}
+                </div>
               );
             })}
           </div>
         </div>
 
         {/* Actions */}
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between w-full">
           <button
             className="mt-6 px-6 py-3 rounded-full bg-neutral-900 text-white content-start"
             onClick={handlePrepToday}
           >
             I prepped today ✨
           </button>
-
-          {showConfetti && (
-            <Confetti className="fixed inset-0 pointer-events-none z-50" />
-          )}
-
           <button
             className="mt-4 px-6 py-3 rounded-full border"
             onClick={handleReset}

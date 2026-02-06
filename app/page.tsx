@@ -1,5 +1,6 @@
 "use client";
 
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import { useEffect, useState, useRef } from "react";
 import { Confetti, type ConfettiRef } from "@/components/ui/confetti";
 
@@ -160,6 +161,7 @@ export default function Home() {
           </button>
         </div>
       </div>
+      <SpeedInsights />
     </main>
   );
 }

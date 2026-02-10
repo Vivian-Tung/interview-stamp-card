@@ -1,6 +1,5 @@
 "use client";
 
-import { SpeedInsights } from "@vercel/speed-insights/next"
 import { useEffect, useState, useRef } from "react";
 import { Confetti, type ConfettiRef } from "@/components/ui/confetti";
 import CreateCard from "./CreateCard";
@@ -138,7 +137,6 @@ export default function Home() {
     return (
       <>
         <CreateCard onCreate={setConfig} />
-        <SpeedInsights />
       </>
     );
   }

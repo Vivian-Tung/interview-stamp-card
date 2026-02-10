@@ -227,7 +227,6 @@ export default function Home() {
           </button>
         </div>
       </div>
-      <SpeedInsights />
     </main>
   );
 }

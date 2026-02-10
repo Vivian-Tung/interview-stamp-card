@@ -6,7 +6,7 @@ import { Confetti, type ConfettiRef } from "@/components/ui/confetti";
 import CreateCard from "./CreateCard";
 
 
-type CardConfig = {
+export type CardConfig = {
   title: string;
   totalStamps: number;
 }
@@ -221,12 +221,6 @@ export default function Home() {
 
         {/* Actions */}
         <div className="flex justify-between w-full">
-          {/* <button
-            className="mt-6 px-6 py-3 rounded-full bg-neutral-900 text-white content-start"
-            onClick={handlePrepToday}
-          >
-            I prepped today ✨
-          </button> */}
           <button
             className="mt-4 px-6 py-3 rounded-full border"
             onClick={handleReset}

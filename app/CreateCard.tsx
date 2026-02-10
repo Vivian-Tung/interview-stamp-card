@@ -1,7 +1,12 @@
 "use client";
 import { useState } from "react";
+import type { CardConfig } from "./page";
 
-export default function CreateCard({ onCreate }) {
+type CreateCardProps = {
+  onCreate: (config: CardConfig) => void;
+};
+
+export default function CreateCard({ onCreate }: CreateCardProps) {
   const [title, setTitle] = useState("");
   const [total, setTotal] = useState(10);
 

@@ -41,19 +41,26 @@ export default function Home() {
   const confettiRef = useRef<ConfettiRef>(null)
   const totalStamps = 10;
   const week = getCurrentWeek();
-  const [filledCount, setFillCount] = useState(0);
+  // const [filledCount, setFillCount] = useState(0);
+  const [stamps, setStamps] = useState<boolean[]>(
+    Array(totalStamps).fill(false)
+  );
+  const filledCount = stamps.filter(Boolean).length;
   const [showConfetti, setShowConfetti] = useState(false);
+  const empty = Array(totalStamps).fill(false);
+
 
   useEffect(() => {
     const storedWeekKey = localStorage.getItem("weekKey");
-    const storedCount = localStorage.getItem("filledCount");
+    const stored = localStorage.getItem("stamps");
 
-    if (storedWeekKey === week.key && storedCount) {
-      setFillCount(Number(storedCount));
+    if (storedWeekKey === week.key && stored) {
+      setStamps(JSON.parse(stored));
     } else {
       localStorage.setItem("weekKey", week.key);
-      localStorage.setItem("filledCount", "0");
-      setFillCount(0);
+      localStorage.setItem("stamps", JSON.stringify(empty));
+      setStamps(empty);
+
     }
   }, [week.key]);
 
@@ -61,19 +68,32 @@ export default function Home() {
     localStorage.setItem("filledCount", String(filledCount));
   }, [filledCount]);
 
-  const handlePrepToday = () => {
-    setFillCount((prev) => {
-      if (prev >= totalStamps) return prev;
-      const next = prev + 1;
-      if (next === totalStamps) setShowConfetti(true);
-      return next;
+  useEffect(() => {
+    if (filledCount == totalStamps) {
+      setShowConfetti(true);
+    }
+  })
+  // const handlePrepToday = () => {
+  //   setFillCount((prev) => {
+  //     if (prev >= totalStamps) return prev;
+  //     const next = prev + 1;
+  //     if (next === totalStamps) setShowConfetti(true);
+  //     return next;
+  //   });
+  // };
+
+  const toggleStamp = (index: number) => {
+    setStamps(prev => {
+      const updated = [...prev];
+      updated[index] = !updated[index]; // toggle
+      return updated;
     });
   };
 
   const handleReset = () => {
-    setFillCount(0);
+    setStamps(empty)
     setShowConfetti(false);
-    localStorage.setItem("filledCount", "0");
+    localStorage.setItem("stamps", JSON.stringify(empty));
   };
 
   const stampStyle = (filled: boolean) => ({
@@ -134,25 +154,26 @@ export default function Home() {
               maxWidth: "300px",
             }}
           >
-            {Array.from({ length: totalStamps }).map((_, index) => {
-              const isFilled = index < filledCount;
-              return (
-                <div key={index} style={stampStyle(isFilled)}>
-                  {isFilled ? "DONE" : ""}
-                </div>
-              );
-            })}
+          {stamps.map((isFilled, index) => (
+            <button
+              key={index}
+              onClick={() => toggleStamp(index)}
+              style={stampStyle(isFilled)}
+            >
+              {isFilled ? "DONE" : ""}
+            </button>
+          ))}
           </div>
         </div>
 
         {/* Actions */}
         <div className="flex justify-between w-full">
-          <button
+          {/* <button
             className="mt-6 px-6 py-3 rounded-full bg-neutral-900 text-white content-start"
             onClick={handlePrepToday}
           >
             I prepped today ✨
-          </button>
+          </button> */}
           <button
             className="mt-4 px-6 py-3 rounded-full border"
             onClick={handleReset}
